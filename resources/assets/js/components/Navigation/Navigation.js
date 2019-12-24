@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 
+var styles = {
+  mainNav:{
+    backgroung:'black'
+  }
+}
 class Navigation extends Component {
   constructor(props) {
     super(props);
@@ -13,7 +18,7 @@ class Navigation extends Component {
         <nav className="navbar navbar-default navbar-static-top">
           <div className="container">
             <div className="navbar-header">
-                   {/* Collapsed Hamburger */}     
+              {/* Collapsed Hamburger */}
               <button
                 type="button"
                 className="navbar-toggle collapsed"
@@ -26,17 +31,17 @@ class Navigation extends Component {
                 <span className="icon-bar" />
                 <span className="icon-bar" />
               </button>
-                   {/* Branding Image */}     
+              {/* Branding Image */}
               <a className="navbar-brand" href="#">
                 Laravel
               </a>
             </div>
             <div className="collapse navbar-collapse" id="app-navbar-collapse">
-                   {/* Left Side Of Navbar */}     
+              {/* Left Side Of Navbar */}
               <ul className="nav navbar-nav">&nbsp;</ul>
-                   {/* Right Side Of Navbar */}     
+              {/* Right Side Of Navbar */}
               <ul className="nav navbar-nav navbar-right">
-                     {/* Authentication Links */}     
+                {/* Authentication Links */}
                 <li className="dropdown">
                   <a
                     href="#"
@@ -51,11 +56,7 @@ class Navigation extends Component {
                   </a>
                   <ul className="dropdown-menu">
                     <li>
-                      <a
-                        href="{{ route('logout') }}"
-                        onclick="event.preventDefault();
-                                               console.log('I am the shit')"
-                      >
+                      <a href="#" onClick={() => console.log("I am the shit")}>
                         Logout
                       </a>
                     </li>
