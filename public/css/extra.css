@@ -1,4 +1,26 @@
 
+
+
+.nav-polish{
+  height:65px;
+  padding-top:10px;
+  background:whitesmoke;
+}
+
+
+
+
+html{
+  background:white !important;
+}
+
+body{
+  background:white !important;
+}
+.stick-nav{
+  position:fixed; 
+  width:100%;
+}
 .section-chosen-btn{
   padding:5px 25px;
 }

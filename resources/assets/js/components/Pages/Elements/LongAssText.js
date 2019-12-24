@@ -13,6 +13,7 @@ class LongAssText extends Component {
         <center>
           <h5>Write Your Long Text Here</h5>
         </center>
+        
         <textarea
           placeholder="Write your long texts here..."
           className="form-control"

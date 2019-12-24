@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Tagline from "./Elements/Tagline";
 import LongAssText from "./Elements/LongAssText";
+import EventCreator from "./Elements/EventCreator";
 
 
 class Home extends Component {
@@ -13,7 +14,7 @@ class Home extends Component {
     return (
       <div> 
         <div className="container">
-          <div className="thumbnail thumbnail-finish raise clearfix">
+          <div className="thumbnail thumbnail-finish raise clearfix" style={{marginTop:95}}>
             <center>
               <h5>Choose which sections you would like to show on on your viewer's side and provide the approppriate content</h5>
             </center>
@@ -29,8 +30,11 @@ class Home extends Component {
             <button className="btn btn-default round-me margin-6 pull-right remove-outline preview-btn-finish">I would like to see a preview of the web page</button>
           </div>
 
+
           <Tagline />
+          <EventCreator />
           <LongAssText />
+       
         </div>
       </div>
     );

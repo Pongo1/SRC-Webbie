@@ -15,7 +15,7 @@ class Navigation extends Component {
   render() {
     return (
       <div>
-        <nav className="navbar navbar-default navbar-static-top">
+        <nav className="navbar navbar-default navbar-static-top stick-nav nav-polish z-depth-1">
           <div className="container">
             <div className="navbar-header">
               {/* Collapsed Hamburger */}
