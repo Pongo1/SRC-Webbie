@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom';
+import Navigation from './Navigation/Navigation';
 
 export default class Main extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ export default class Main extends Component {
   render() {
     return (
       <div>
-
+        <Navigation />
       </div>
     )
   }
