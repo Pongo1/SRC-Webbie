@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import $ from 'jquery';
 var styles = {
   mainNav:{
     backgroung:'black'
@@ -8,9 +8,11 @@ var styles = {
 class Navigation extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {};
+   
   }
+
+  
+  
 
   render() {
     return (
@@ -54,9 +56,12 @@ class Navigation extends Component {
                   >
                     Frimpong <span className="caret" />
                   </a>
+                  <form id ="logout-form" > 
+                    <input type ="hidden" name="_token" value = "" />
+                  </form>
                   <ul className="dropdown-menu">
                     <li>
-                      <a href="#" onClick={() => console.log("I am the shit")}>
+                      <a href="#" onClick={() => {}}>
                         Logout
                       </a>
                     </li>

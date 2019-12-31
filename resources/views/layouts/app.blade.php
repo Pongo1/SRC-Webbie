@@ -63,7 +63,7 @@
                                             {{ csrf_field() }}
                                         </form>
                                     </li>
-                                </ul>
+                                </ul>π
                             </li>
                         @endguest
                     </ul>

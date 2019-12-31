@@ -7,8 +7,14 @@ import EventCreator from "./Elements/EventCreator";
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { token: null };
   }
+  async componentWillMount(){
+    var token = await $.ajax({method:'GET', url:'get-csrf-token'}); 
+    this.setState({token})
+      console.log("I am the token", token )
+  }
+
 
   render() {
     return (
@@ -29,8 +35,6 @@ class Home extends Component {
             <small className="margin-6 text text-danger pull-left">Click on selected section to remove</small>
             <button className="btn btn-default round-me margin-6 pull-right remove-outline preview-btn-finish">I would like to see a preview of the web page</button>
           </div>
-
-
           <Tagline />
           <EventCreator />
           <LongAssText />
