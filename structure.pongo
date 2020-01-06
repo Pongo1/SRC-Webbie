@@ -1,0 +1,20 @@
+images table 
+  id
+  subdomain id 
+  img url
+about text table 
+  id
+  subdomain id 
+  body 
+events table 
+  id
+  subdomain id 
+  event img 
+  guests 
+  start date 
+  end date 
+  status ( completed or ongoing)
+subdomains table 
+  id
+  name
+-------------------------------------------------------

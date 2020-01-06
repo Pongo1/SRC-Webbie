@@ -86,6 +86,10 @@
                     Laravel
                 </div>
 
+                  <form action ="{{route('logout')}}" method="POST"> 
+                    {{ csrf_field() }}
+                    <button >Logout</button>
+                  </form >
                 <div class="links">
                     <a href="https://laravel.com/docs">Documentation</a>
                     <a href="https://laracasts.com">Laracasts</a>
