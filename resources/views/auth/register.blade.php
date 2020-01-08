@@ -4,7 +4,10 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default z-depth-1" style="padding-top:10px; margin-top:25%">
+          <center> 
+            <p style="padding-top:10px; margin-top:25%" class="alert alert-info">Use the division's official email. <b>Rsvps</b> for future events will be sent to this email </p>
+          </center>
+            <div class="panel panel-default z-depth-1" >
                 <div class="panel-heading"><b>Create An SRC Division</b></div>
 
                 <div class="panel-body">
@@ -15,7 +18,7 @@
                             <label for="name" class="col-md-4 control-label">Name Of Division</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
+                                <input id="reg-name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
 
                                 @if ($errors->has('name'))
                                     <span class="help-block">
@@ -29,7 +32,7 @@
                             <label for="email" class="col-md-4 control-label">Division E-Mail Address</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                                <input id="reg-email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">
@@ -43,7 +46,7 @@
                             <label for="password" class="col-md-4 control-label">Password</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+                                <input id="reg-pass" type="password" class="form-control" name="password" required>
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">
@@ -57,13 +60,18 @@
                             <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                                <input id="reg-confirm" type="password" class="form-control" name="password_confirmation" required>
                             </div>
                         </div>
 
                         <div class="form-group">
+                          
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
+                              <small class="text text-danger" id="slim-error" style="display:none"></small><br/>
+                                <button type="submit"  style="display:none" id ="reg-submit-btn" class="btn btn-primary">
+                                    Register
+                                </button>
+                                <button type="submit"  id ="reg-submit-btn-fake" class="btn btn-primary" disabled>
                                     Register
                                 </button>
                             </div>

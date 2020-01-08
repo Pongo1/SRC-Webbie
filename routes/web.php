@@ -10,3 +10,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/get-csrf-token',function(){
   return csrf_token();
 });
+
+Route::get('name.check/{name}','MainController@checkUniqueness');
