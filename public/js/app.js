@@ -54468,6 +54468,8 @@ module.exports = ReactDOMInvalidARIAHook;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Elements_Tagline__ = __webpack_require__(226);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Elements_LongAssText__ = __webpack_require__(227);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Elements_EventCreator__ = __webpack_require__(228);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_jquery__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_jquery__);
 
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -54491,6 +54493,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+
 var Home = function (_Component) {
   _inherits(Home, _Component);
 
@@ -54502,11 +54505,13 @@ var Home = function (_Component) {
     _this.handleText = _this.handleText.bind(_this);
     _this.addToGuests = _this.addToGuests.bind(_this);
     _this.removeGuest = _this.removeGuest.bind(_this);
+    _this.addEvent = _this.addEvent.bind(_this);
     _this.state = {
       token: null,
       section_items: [],
       formData: {},
-      guests: []
+      guests: [],
+      events: []
     };
     return _this;
   }
@@ -54530,6 +54535,30 @@ var Home = function (_Component) {
       this.setState({ guests: guests });
     }
   }, {
+    key: "addEvent",
+    value: function addEvent(comp) {
+      var events = this.state.events;
+      var a, b, c, d, e;
+      a = comp.refs.event_end.value.trim();
+      b = comp.refs.event_start.value.trim();
+      c = comp.refs.event_title.value.trim();
+      d = comp.refs.event_desc.value.trim();
+      e = __WEBPACK_IMPORTED_MODULE_5_jquery___default()('#file').files;
+      console.log(e);
+      if (a === "" || b === "" || c === "" || d === "") {
+        alert("Please Fill Out All Parameters For The Event!");
+        return;
+      }
+      console.log(a, b, c, d);
+      var arr = {
+        event_end: a,
+        event_start: b,
+        event_title: c,
+        event_desc: d
+      };
+      this.setState({ events: [].concat(_toConsumableArray(events), [arr]) });
+    }
+  }, {
     key: "componentWillMount",
     value: function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
@@ -54539,7 +54568,7 @@ var Home = function (_Component) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return $.ajax({ method: "GET", url: "get-csrf-token" });
+                return __WEBPACK_IMPORTED_MODULE_5_jquery___default.a.ajax({ method: "GET", url: "get-csrf-token" });
 
               case 2:
                 token = _context.sent;
@@ -54680,7 +54709,7 @@ var Home = function (_Component) {
             )
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Elements_Tagline__["a" /* default */], { handleText: this.handleText }),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Elements_EventCreator__["a" /* default */], { guests: this.state.guests, handleText: this.handleText, addToGuests: this.addToGuests, removeGuest: this.removeGuest }),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Elements_EventCreator__["a" /* default */], { addEvent: this.addEvent, guests: this.state.guests, handleText: this.handleText, addToGuests: this.addToGuests, removeGuest: this.removeGuest }),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Elements_LongAssText__["a" /* default */], { handleText: this.handleText })
         )
       );
@@ -55606,6 +55635,8 @@ var LongAssText = function (_Component) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -55613,6 +55644,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -55652,6 +55684,12 @@ var EventCreator = function (_Component) {
       }
     }
   }, {
+    key: "handleFile",
+    value: function handleFile(event) {
+      var name = event.target.files[0].name;
+      __WEBPACK_IMPORTED_MODULE_1_jquery___default()('#file-name').val(name);
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this3 = this;
@@ -55669,10 +55707,7 @@ var EventCreator = function (_Component) {
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
-          onChange: function onChange(event) {
-            _this3.props.handleText(event);
-          },
-          name: "event_title",
+          ref: "event_title",
           type: "text",
           className: "form-control margin-6",
           max: "5",
@@ -55683,17 +55718,13 @@ var EventCreator = function (_Component) {
           null,
           "Start Date"
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { name: "event_start", onChange: function onChange(event) {
-            _this3.props.handleText(event);
-          }, type: "date", className: "form-control margin-6" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { ref: "event_start", type: "date", className: "form-control margin-6" }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h5",
           null,
           "End date "
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { name: "event_end", onChange: function onChange(event) {
-            _this3.props.handleText(event);
-          }, type: "date", className: "form-control margin-6" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { ref: "event_end", type: "date", className: "form-control margin-6" }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "small",
           null,
@@ -55725,22 +55756,34 @@ var EventCreator = function (_Component) {
           onChange: function onChange(event) {
             _this3.props.handleText(event);
           },
-          name: "event_desc",
+          ref: "event_desc",
           placeholder: "Briefly describe the event...",
           className: "form-control margin-6",
           rows: "10"
         }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "small",
-          null,
+          { id: "file-name" },
           "Upload A Picture"
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "file", id: "file", onChange: function onChange(event) {
+            _this3.handleFile(event);
+          }, something: true, style: { display: 'none' } }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "button",
-          { className: "btn  btn-default round-me remove-outline" },
+          { onClick: function onClick() {
+              __WEBPACK_IMPORTED_MODULE_1_jquery___default()('#file').click();
+            }, className: "btn  btn-default round-me remove-outline" },
           "Upload ",
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("i", { className: "glyphicon glyphicon-upload" })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "button",
+          { onClick: function onClick() {
+              _this3.props.addEvent(_this3);
+            }, className: "btn btn-success z-depth-1 round-me pull-right outline-0" },
+          "Save Event And Add Another"
         )
       );
     }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import $ from 'jquery';
 class EventCreator extends Component {
   
   ejectGuestNames() {
@@ -21,7 +21,10 @@ class EventCreator extends Component {
     }
   }
  
-
+  handleFile(event){
+    var name = event.target.files[0].name; 
+    $('#file-name').val(name);
+  }
   render() {
     return (
       <div className="thumbnail thumbnail-finish">
@@ -29,17 +32,16 @@ class EventCreator extends Component {
           <h5>Tell everyone about an event that will be happening soon</h5>
         </center>
         <input
-          onChange={(event)=>{this.props.handleText(event)}}
-          name="event_title"
+          ref="event_title"
           type="text"
           className="form-control margin-6"
           max="5"
           placeholder="Event Title"
         />
         <h5>Start Date</h5>
-        <input name="event_start" onChange={(event)=>{this.props.handleText(event)}} type="date" className="form-control margin-6" />
+        <input ref="event_start"  type="date" className="form-control margin-6" />
         <h5>End date </h5>
-        <input name ="event_end" onChange={(event)=>{this.props.handleText(event)}} type="date" className="form-control margin-6" />
+        <input ref ="event_end" type="date" className="form-control margin-6" />
         <small>Add guests so we can put them where everyone will see</small>
         <br />
         <button
@@ -61,16 +63,19 @@ class EventCreator extends Component {
         {this.ejectGuestNames()}
         <textarea
         onChange={(event)=>{this.props.handleText(event)}}
-          name="event_desc"
+          ref="event_desc"
           placeholder="Briefly describe the event..."
           className="form-control margin-6"
           rows="10"
         ></textarea>
-        <small>Upload A Picture</small>
+        <small id="file-name">Upload A Picture</small>
         <br />
-        <button className="btn  btn-default round-me remove-outline">
+        <input type="file" id ="file" onChange = {(event)=>{this.handleFile(event)}} something style={{display:'none'}}/>
+        <button onClick = {()=>{$('#file').click()}}className="btn  btn-default round-me remove-outline">
           Upload <i className="glyphicon glyphicon-upload"></i>
         </button>
+
+        <button onClick = {()=>{this.props.addEvent(this)}} className="btn btn-success z-depth-1 round-me pull-right outline-0">Save Event And Add Another</button>
       </div>
     );
   }

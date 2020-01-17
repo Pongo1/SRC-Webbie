@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Tagline from "./Elements/Tagline";
 import LongAssText from "./Elements/LongAssText";
 import EventCreator from "./Elements/EventCreator";
+import $ from 'jquery';
 
 class Home extends Component {
   constructor(props) {
@@ -9,11 +10,13 @@ class Home extends Component {
     this.handleText = this.handleText.bind(this);
     this.addToGuests = this.addToGuests.bind(this); 
     this.removeGuest = this.removeGuest.bind(this);
+    this.addEvent = this.addEvent.bind(this);
     this.state = {
       token: null,
       section_items: [], 
       formData:{}, 
-      guests:[]
+      guests:[],
+      events:[]
     };
   }
   addToGuests() {
@@ -27,6 +30,28 @@ class Home extends Component {
     var guests = this.state.guests; 
     guests = guests.filter( g => g !==guest); 
     this.setState({guests});
+  }
+  addEvent(comp){
+    const events = this.state.events;
+    var a,b,c,d,e; 
+    a = comp.refs.event_end.value.trim(); 
+    b = comp.refs.event_start.value.trim();
+    c = comp.refs.event_title.value.trim();
+    d =  comp.refs.event_desc.value.trim();
+    e = $('#file').files 
+    console.log(e);
+    if( a ==="" || b==="" || c==="" || d==="") {
+      alert("Please Fill Out All Parameters For The Event!")
+      return
+    }
+    console.log(a,b,c,d)
+    var arr = {
+      event_end: a, 
+      event_start: b, 
+      event_title: c,
+      event_desc:d
+    };
+    this.setState({events:[...events,arr]});
   }
   async componentWillMount() {
     var token = await $.ajax({ method: "GET", url: "get-csrf-token" });
@@ -105,7 +130,7 @@ class Home extends Component {
             </button>
           </div>
           <Tagline handleText = {this.handleText}/>
-          <EventCreator guests = {this.state.guests} handleText = {this.handleText} addToGuests = {this.addToGuests} removeGuest = {this.removeGuest} />
+          <EventCreator addEvent = {this.addEvent} guests = {this.state.guests} handleText = {this.handleText} addToGuests = {this.addToGuests} removeGuest = {this.removeGuest} />
           <LongAssText handleText = {this.handleText} />
         </div>
       </div>
