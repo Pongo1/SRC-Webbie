@@ -6,11 +6,27 @@ import EventCreator from "./Elements/EventCreator";
 class Home extends Component {
   constructor(props) {
     super(props);
+    this.handleText = this.handleText.bind(this);
+    this.addToGuests = this.addToGuests.bind(this); 
+    this.removeGuest = this.removeGuest.bind(this);
     this.state = {
       token: null,
       section_items: [], 
-      
+      formData:{}, 
+      guests:[]
     };
+  }
+  addToGuests() {
+    const name = document.getElementById('guest_name').value;
+    if (this.state.guests.includes(name) || name.trim() === "") return;
+    const g = this.state.guests;
+    this.setState({ guests: [...g, name] });
+    document.getElementById('guest_name').value = "";
+  }
+  removeGuest(guest){
+    var guests = this.state.guests; 
+    guests = guests.filter( g => g !==guest); 
+    this.setState({guests});
   }
   async componentWillMount() {
     var token = await $.ajax({ method: "GET", url: "get-csrf-token" });
@@ -51,6 +67,11 @@ class Home extends Component {
     sections = sections.filter(sec => sec !==val); 
     this.setState({section_items:sections});
   }
+  handleText(event){
+    var form = this.state.formData;
+    form = {...form,[event.target.name]:event.target.value};
+    this.setState({formData: form});
+  }
   render() {
     return (
       <div>
@@ -83,9 +104,9 @@ class Home extends Component {
               I would like to see a preview of the web page
             </button>
           </div>
-          <Tagline />
-          <EventCreator />
-          <LongAssText />
+          <Tagline handleText = {this.handleText}/>
+          <EventCreator guests = {this.state.guests} handleText = {this.handleText} addToGuests = {this.addToGuests} removeGuest = {this.removeGuest} />
+          <LongAssText handleText = {this.handleText} />
         </div>
       </div>
     );

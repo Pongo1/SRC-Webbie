@@ -14,7 +14,7 @@ class Tagline extends Component {
       <div>
         <div className="thumbnail thumbnail-finish">
           <center><h5>Write A Tagline For Your Page</h5></center>
-          <input type="text"  className="form-control" max="5" placeholder="Something like 'Welcome to the SRC world'"/>
+          <input name="tagline" type="text" onChange={(event)=>{this.props.handleText(event)}} className="form-control" max="5" placeholder="Something like 'Welcome to the SRC world'"/>
         </div>
       </div>
     )

@@ -1,24 +1,13 @@
 import React, { Component } from "react";
 
 class EventCreator extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { guests: [] };
-  }
-
-  addToGuests() {
-    const name = this.refs.guest_name.value;
-    if (this.state.guests.includes(name) || name.trim() === "") return;
-    const g = this.state.guests;
-    this.setState({ guests: [...g, name] });
-    this.refs.guest_name.value = "";
-  }
+  
   ejectGuestNames() {
-    return this.state.guests.map((g, index) => {
+    return this.props.guests.map((g, index) => {
       return (
         <button
           key={index}
-          onClick = {()=>{this.removeGuest(g)}}
+          onClick = {()=>{this.props.removeGuest(g)}}
           className="btn btn-default round-me remove-outline margin-6"
         >
           {g}
@@ -28,14 +17,10 @@ class EventCreator extends Component {
   }
   handleEnter(event){
     if(event.keyCode ===13){
-      this.addToGuests();
+      this.props.addToGuests();
     }
   }
-  removeGuest(guest){
-    var guests = this.state.guests; 
-    guests = guests.filter( g => g !==guest); 
-    this.setState({guests});
-  }
+ 
 
   render() {
     return (
@@ -44,15 +29,17 @@ class EventCreator extends Component {
           <h5>Tell everyone about an event that will be happening soon</h5>
         </center>
         <input
+          onChange={(event)=>{this.props.handleText(event)}}
+          name="event_title"
           type="text"
           className="form-control margin-6"
           max="5"
           placeholder="Event Title"
         />
         <h5>Start Date</h5>
-        <input type="date" className="form-control margin-6" />
+        <input name="event_start" onChange={(event)=>{this.props.handleText(event)}} type="date" className="form-control margin-6" />
         <h5>End date </h5>
-        <input type="date" className="form-control margin-6" />
+        <input name ="event_end" onChange={(event)=>{this.props.handleText(event)}} type="date" className="form-control margin-6" />
         <small>Add guests so we can put them where everyone will see</small>
         <br />
         <button
@@ -65,7 +52,7 @@ class EventCreator extends Component {
         </button>
         <input
           onKeyDown = {(event)=>{this.handleEnter(event)}}
-          ref="guest_name"
+          id="guest_name"
           type="text"
           className="form-control"
           placeholder="Fred Swaniker"
@@ -73,6 +60,8 @@ class EventCreator extends Component {
         />
         {this.ejectGuestNames()}
         <textarea
+        onChange={(event)=>{this.props.handleText(event)}}
+          name="event_desc"
           placeholder="Briefly describe the event..."
           className="form-control margin-6"
           rows="10"

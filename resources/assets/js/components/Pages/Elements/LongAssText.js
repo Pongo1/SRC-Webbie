@@ -13,8 +13,9 @@ class LongAssText extends Component {
         <center>
           <h5>Write Your Long Text Here</h5>
         </center>
-        
         <textarea
+           onChange={(event)=>{this.props.handleText(event)}}
+           name="long_text"
           placeholder="Write your long texts here..."
           className="form-control"
           rows="17"

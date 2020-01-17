@@ -54470,11 +54470,15 @@ module.exports = ReactDOMInvalidARIAHook;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Elements_EventCreator__ = __webpack_require__(228);
 
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -54495,15 +54499,37 @@ var Home = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this, props));
 
+    _this.handleText = _this.handleText.bind(_this);
+    _this.addToGuests = _this.addToGuests.bind(_this);
+    _this.removeGuest = _this.removeGuest.bind(_this);
     _this.state = {
       token: null,
       section_items: [],
-      formData: {}
+      formData: {},
+      guests: []
     };
     return _this;
   }
 
   _createClass(Home, [{
+    key: "addToGuests",
+    value: function addToGuests() {
+      var name = document.getElementById('guest_name').value;
+      if (this.state.guests.includes(name) || name.trim() === "") return;
+      var g = this.state.guests;
+      this.setState({ guests: [].concat(_toConsumableArray(g), [name]) });
+      document.getElementById('guest_name').value = "";
+    }
+  }, {
+    key: "removeGuest",
+    value: function removeGuest(guest) {
+      var guests = this.state.guests;
+      guests = guests.filter(function (g) {
+        return g !== guest;
+      });
+      this.setState({ guests: guests });
+    }
+  }, {
     key: "componentWillMount",
     value: function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
@@ -54581,6 +54607,13 @@ var Home = function (_Component) {
       this.setState({ section_items: sections });
     }
   }, {
+    key: "handleText",
+    value: function handleText(event) {
+      var form = this.state.formData;
+      form = _extends({}, form, _defineProperty({}, event.target.name, event.target.value));
+      this.setState({ formData: form });
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this3 = this;
@@ -54646,9 +54679,9 @@ var Home = function (_Component) {
               "I would like to see a preview of the web page"
             )
           ),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Elements_Tagline__["a" /* default */], null),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Elements_EventCreator__["a" /* default */], null),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Elements_LongAssText__["a" /* default */], null)
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Elements_Tagline__["a" /* default */], { handleText: this.handleText }),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Elements_EventCreator__["a" /* default */], { guests: this.state.guests, handleText: this.handleText, addToGuests: this.addToGuests, removeGuest: this.removeGuest }),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Elements_LongAssText__["a" /* default */], { handleText: this.handleText })
         )
       );
     }
@@ -55472,6 +55505,8 @@ var Tagline = function (_Component) {
   _createClass(Tagline, [{
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
         null,
@@ -55487,7 +55522,9 @@ var Tagline = function (_Component) {
               "Write A Tagline For Your Page"
             )
           ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "text", className: "form-control", max: "5", placeholder: "Something like 'Welcome to the SRC world'" })
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { name: "tagline", type: "text", onChange: function onChange(event) {
+              _this2.props.handleText(event);
+            }, className: "form-control", max: "5", placeholder: "Something like 'Welcome to the SRC world'" })
         )
       );
     }
@@ -55530,6 +55567,8 @@ var LongAssText = function (_Component) {
   _createClass(LongAssText, [{
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
         { className: "thumbnail thumbnail-finish" },
@@ -55543,6 +55582,10 @@ var LongAssText = function (_Component) {
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("textarea", {
+          onChange: function onChange(event) {
+            _this2.props.handleText(event);
+          },
+          name: "long_text",
           placeholder: "Write your long texts here...",
           className: "form-control",
           rows: "17"
@@ -55565,8 +55608,6 @@ var LongAssText = function (_Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -55578,36 +55619,24 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var EventCreator = function (_Component) {
   _inherits(EventCreator, _Component);
 
-  function EventCreator(props) {
+  function EventCreator() {
     _classCallCheck(this, EventCreator);
 
-    var _this = _possibleConstructorReturn(this, (EventCreator.__proto__ || Object.getPrototypeOf(EventCreator)).call(this, props));
-
-    _this.state = { guests: [] };
-    return _this;
+    return _possibleConstructorReturn(this, (EventCreator.__proto__ || Object.getPrototypeOf(EventCreator)).apply(this, arguments));
   }
 
   _createClass(EventCreator, [{
-    key: "addToGuests",
-    value: function addToGuests() {
-      var name = this.refs.guest_name.value;
-      if (this.state.guests.includes(name) || name.trim() === "") return;
-      var g = this.state.guests;
-      this.setState({ guests: [].concat(_toConsumableArray(g), [name]) });
-      this.refs.guest_name.value = "";
-    }
-  }, {
     key: "ejectGuestNames",
     value: function ejectGuestNames() {
       var _this2 = this;
 
-      return this.state.guests.map(function (g, index) {
+      return this.props.guests.map(function (g, index) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "button",
           {
             key: index,
             onClick: function onClick() {
-              _this2.removeGuest(g);
+              _this2.props.removeGuest(g);
             },
             className: "btn btn-default round-me remove-outline margin-6"
           },
@@ -55619,17 +55648,8 @@ var EventCreator = function (_Component) {
     key: "handleEnter",
     value: function handleEnter(event) {
       if (event.keyCode === 13) {
-        this.addToGuests();
+        this.props.addToGuests();
       }
-    }
-  }, {
-    key: "removeGuest",
-    value: function removeGuest(guest) {
-      var guests = this.state.guests;
-      guests = guests.filter(function (g) {
-        return g !== guest;
-      });
-      this.setState({ guests: guests });
     }
   }, {
     key: "render",
@@ -55649,6 +55669,10 @@ var EventCreator = function (_Component) {
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
+          onChange: function onChange(event) {
+            _this3.props.handleText(event);
+          },
+          name: "event_title",
           type: "text",
           className: "form-control margin-6",
           max: "5",
@@ -55659,13 +55683,17 @@ var EventCreator = function (_Component) {
           null,
           "Start Date"
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "date", className: "form-control margin-6" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { name: "event_start", onChange: function onChange(event) {
+            _this3.props.handleText(event);
+          }, type: "date", className: "form-control margin-6" }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h5",
           null,
           "End date "
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "date", className: "form-control margin-6" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { name: "event_end", onChange: function onChange(event) {
+            _this3.props.handleText(event);
+          }, type: "date", className: "form-control margin-6" }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "small",
           null,
@@ -55686,7 +55714,7 @@ var EventCreator = function (_Component) {
           onKeyDown: function onKeyDown(event) {
             _this3.handleEnter(event);
           },
-          ref: "guest_name",
+          id: "guest_name",
           type: "text",
           className: "form-control",
           placeholder: "Fred Swaniker",
@@ -55694,6 +55722,10 @@ var EventCreator = function (_Component) {
         }),
         this.ejectGuestNames(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("textarea", {
+          onChange: function onChange(event) {
+            _this3.props.handleText(event);
+          },
+          name: "event_desc",
           placeholder: "Briefly describe the event...",
           className: "form-control margin-6",
           rows: "10"
