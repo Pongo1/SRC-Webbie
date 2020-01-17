@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
           <center> 
-            <p style="padding-top:10px; margin-top:25%" class="alert alert-info">Use the division's official email. <b>Rsvps</b> for future events will be sent to this email </p>
+            <p style="padding-top:10px; margin-top:25%" class="alert alert-info">Use the branch's official email. <b>Rsvps</b> for future events will be sent to this email </p>
           </center>
             <div class="panel panel-default z-depth-1" >
                 <div class="panel-heading"><b>Create An SRC Division</b></div>
@@ -15,7 +15,7 @@
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name Of Division</label>
+                            <label for="name" class="col-md-4 control-label">Name Of Branch</label>
 
                             <div class="col-md-6">
                                 <input id="reg-name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
@@ -29,7 +29,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">Division E-Mail Address</label>
+                            <label for="email" class="col-md-4 control-label">Branch E-Mail Address</label>
 
                             <div class="col-md-6">
                                 <input id="reg-email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
@@ -83,3 +83,8 @@
     </div>
 </div>
 @endsection
+
+@section('custom-js') 
+  <script src="{{ asset('js/extra/unique.js') }}" defer></script>
+
+@endsection 

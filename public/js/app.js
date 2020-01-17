@@ -54472,6 +54472,8 @@ module.exports = ReactDOMInvalidARIAHook;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -54493,7 +54495,11 @@ var Home = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this, props));
 
-    _this.state = { token: null };
+    _this.state = {
+      token: null,
+      section_items: [],
+      formData: {}
+    };
     return _this;
   }
 
@@ -54507,15 +54513,14 @@ var Home = function (_Component) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return $.ajax({ method: 'GET', url: 'get-csrf-token' });
+                return $.ajax({ method: "GET", url: "get-csrf-token" });
 
               case 2:
                 token = _context.sent;
 
                 this.setState({ token: token });
-                console.log("I am the token", token);
 
-              case 5:
+              case 4:
               case "end":
                 return _context.stop();
             }
@@ -54530,8 +54535,56 @@ var Home = function (_Component) {
       return componentWillMount;
     }()
   }, {
+    key: "ejectSelectedSections",
+    value: function ejectSelectedSections() {
+      var _this2 = this;
+
+      return this.state.section_items.map(function (sec, index) {
+        return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          "button",
+          { onClick: function onClick() {
+              _this2.removeSection(sec);
+            }, key: index, className: "btn btn-default round-me remove-outline margin-6" },
+          sec
+        );
+      });
+    }
+  }, {
+    key: "selectSection",
+    value: function selectSection(event) {
+      var value = event.target.value;
+      var sections = this.state.section_items;
+      switch (value.toUpperCase()) {
+        case "TAGLINE":
+          if (sections.includes(value)) break;
+          this.setState({ section_items: [].concat(_toConsumableArray(sections), [value]) });
+          break;
+        case "ABOUT US":
+          if (sections.includes(value)) break;
+          this.setState({ section_items: [].concat(_toConsumableArray(sections), [value]) });
+          break;
+        case "EVENT":
+          if (sections.includes(value)) break;
+          this.setState({ section_items: [].concat(_toConsumableArray(sections), [value]) });
+          break;
+        default:
+          break;
+      }
+    }
+  }, {
+    key: "removeSection",
+    value: function removeSection(val) {
+      var sections = this.state.section_items;
+      sections = sections.filter(function (sec) {
+        return sec !== val;
+      });
+      this.setState({ section_items: sections });
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         "div",
         null,
@@ -54540,7 +54593,10 @@ var Home = function (_Component) {
           { className: "container" },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             "div",
-            { className: "thumbnail thumbnail-finish raise clearfix", style: { marginTop: 95 } },
+            {
+              className: "thumbnail thumbnail-finish raise clearfix",
+              style: { marginTop: 95 }
+            },
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               "center",
               null,
@@ -54550,31 +54606,32 @@ var Home = function (_Component) {
                 "Choose which sections you would like to show on on your viewer's side and provide the approppriate content"
               )
             ),
-            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-              "button",
-              { className: "btn btn-default round-me remove-outline margin-6" },
-              "First one "
-            ),
+            this.ejectSelectedSections(),
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               "div",
               { className: "combobox-design" },
               __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                 "select",
-                { className: "undefault-combobox" },
+                {
+                  className: "undefault-combobox",
+                  onChange: function onChange(event) {
+                    return _this3.selectSection(event);
+                  }
+                },
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   "option",
                   null,
-                  "First one "
+                  "Event"
                 ),
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   "option",
                   null,
-                  "Second one "
+                  "About Us"
                 ),
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   "option",
                   null,
-                  "Third one "
+                  "Tagline"
                 )
               )
             ),
@@ -55508,6 +55565,8 @@ var LongAssText = function (_Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -55524,13 +55583,59 @@ var EventCreator = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (EventCreator.__proto__ || Object.getPrototypeOf(EventCreator)).call(this, props));
 
-    _this.state = {};
+    _this.state = { guests: [] };
     return _this;
   }
 
   _createClass(EventCreator, [{
+    key: "addToGuests",
+    value: function addToGuests() {
+      var name = this.refs.guest_name.value;
+      if (this.state.guests.includes(name) || name.trim() === "") return;
+      var g = this.state.guests;
+      this.setState({ guests: [].concat(_toConsumableArray(g), [name]) });
+      this.refs.guest_name.value = "";
+    }
+  }, {
+    key: "ejectGuestNames",
+    value: function ejectGuestNames() {
+      var _this2 = this;
+
+      return this.state.guests.map(function (g, index) {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "button",
+          {
+            key: index,
+            onClick: function onClick() {
+              _this2.removeGuest(g);
+            },
+            className: "btn btn-default round-me remove-outline margin-6"
+          },
+          g
+        );
+      });
+    }
+  }, {
+    key: "handleEnter",
+    value: function handleEnter(event) {
+      if (event.keyCode === 13) {
+        this.addToGuests();
+      }
+    }
+  }, {
+    key: "removeGuest",
+    value: function removeGuest(guest) {
+      var guests = this.state.guests;
+      guests = guests.filter(function (g) {
+        return g !== guest;
+      });
+      this.setState({ guests: guests });
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
         { className: "thumbnail thumbnail-finish" },
@@ -55569,20 +55674,25 @@ var EventCreator = function (_Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "button",
-          { className: "btn btn-default pull-right" },
+          {
+            className: "btn btn-default pull-right",
+            onClick: function onClick() {
+              _this3.addToGuests();
+            }
+          },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("i", { className: "glyphicon glyphicon-plus" })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
+          onKeyDown: function onKeyDown(event) {
+            _this3.handleEnter(event);
+          },
+          ref: "guest_name",
           type: "text",
           className: "form-control",
           placeholder: "Fred Swaniker",
           style: { width: "95%" }
         }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "button",
-          { className: "btn btn-default round-me remove-outline margin-6" },
-          "Fred Swaniker "
-        ),
+        this.ejectGuestNames(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("textarea", {
           placeholder: "Briefly describe the event...",
           className: "form-control margin-6",

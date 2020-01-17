@@ -12,7 +12,7 @@
     <!-- <link rel="stylesheet" href="{{asset('css/mdb.min.css')}}"> -->
     <link rel="stylesheet" href="{{asset('css/extra.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.min.css')}}">
-    <script src="{{ asset('js/extra/unique.js') }}" defer></script>
+   
 </head>
 <body>
     <div id="app">
@@ -74,7 +74,7 @@
 
         @yield('content')
     </div>
-
+    @yield('custom-js')
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
 </body>

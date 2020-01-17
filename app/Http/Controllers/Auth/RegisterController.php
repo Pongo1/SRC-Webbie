@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Subdomain;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -62,9 +63,14 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+      //save the domain name
+        $n = new Subdomain(); 
+        $n->name = $data['name'];
+        $n->save();
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'subdomain_id'=>$n->id,
             'password' => bcrypt($data['password']),
         ]);
     }

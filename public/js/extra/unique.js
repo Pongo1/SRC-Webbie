@@ -12,7 +12,6 @@ function checkUnique() {
 setInterval(() => {
   console.log(pass.val(),confirmPass.val(),emailBox.val());
   domainValue = $("#reg-name").val();
-  console.log("I am the domain value", domainValue);
   if (domainValue !== "") {
     checkUnique().done(function(data) {
       if (data.error_code === 404 && confirmPass.val().trim() !=="" && pass.val().trim() !="" && emailBox.val().trim() !=="" ) {

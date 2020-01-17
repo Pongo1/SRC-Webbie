@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default z-depth-1" style="padding-top:10px; margin-top:25%">
-                <div class="panel-heading"><b>Login To An SRC Division</b></div>
+                <div class="panel-heading"><b>Login To An SRC Branch</b></div>
 
                 <div class="panel-body">
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
