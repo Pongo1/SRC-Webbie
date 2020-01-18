@@ -22,8 +22,10 @@ class EventCreator extends Component {
   }
  
   handleFile(event){
+    var file = event.target.files[0]; 
     var name = event.target.files[0].name; 
-    $('#file-name').val(name);
+    this.props.addFile(file);
+    document.getElementById('file-name').innerHTML = name;
   }
   render() {
     return (
@@ -62,7 +64,6 @@ class EventCreator extends Component {
         />
         {this.ejectGuestNames()}
         <textarea
-        onChange={(event)=>{this.props.handleText(event)}}
           ref="event_desc"
           placeholder="Briefly describe the event..."
           className="form-control margin-6"

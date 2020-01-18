@@ -11,12 +11,14 @@ class Home extends Component {
     this.addToGuests = this.addToGuests.bind(this); 
     this.removeGuest = this.removeGuest.bind(this);
     this.addEvent = this.addEvent.bind(this);
+    this.addFile = this.addFile.bind(this);
     this.state = {
       token: null,
       section_items: [], 
       formData:{}, 
       guests:[],
-      events:[]
+      events:[], 
+      current_file:null
     };
   }
   addToGuests() {
@@ -38,9 +40,7 @@ class Home extends Component {
     b = comp.refs.event_start.value.trim();
     c = comp.refs.event_title.value.trim();
     d =  comp.refs.event_desc.value.trim();
-    e = $('#file').files 
-    console.log(e);
-    if( a ==="" || b==="" || c==="" || d==="") {
+    if( a ==="" || b==="" || c==="" || d==="" ||this.state.current_file ===null) {
       alert("Please Fill Out All Parameters For The Event!")
       return
     }
@@ -49,14 +49,26 @@ class Home extends Component {
       event_end: a, 
       event_start: b, 
       event_title: c,
-      event_desc:d
+      event_desc:d, 
+      image:this.state.current_file
     };
-    this.setState({events:[...events,arr]});
+    this.setState({events:[...events,arr], current_file:null});
+    this.cleanUpEvents(comp);
+  }
+  cleanUpEvents(comp){
+    comp.refs.event_end.value = ""; 
+    comp.refs.event_start.value = ""; 
+    comp.refs.event_title.value = ""; 
+    comp.refs.event_desc.value = ""; 
+  }
+  addFile(file){
+    this.setState({current_file:file});
   }
   async componentWillMount() {
     var token = await $.ajax({ method: "GET", url: "get-csrf-token" });
     this.setState({ token });
   }
+
   ejectSelectedSections() {
     return this.state.section_items.map((sec, index) => {
       return (
@@ -98,6 +110,7 @@ class Home extends Component {
     this.setState({formData: form});
   }
   render() {
+    console.log(this.state);
     return (
       <div>
         <div className="container">
@@ -130,7 +143,7 @@ class Home extends Component {
             </button>
           </div>
           <Tagline handleText = {this.handleText}/>
-          <EventCreator addEvent = {this.addEvent} guests = {this.state.guests} handleText = {this.handleText} addToGuests = {this.addToGuests} removeGuest = {this.removeGuest} />
+          <EventCreator  addFile = {this.addFile} addEvent = {this.addEvent} guests = {this.state.guests} handleText = {this.handleText} addToGuests = {this.addToGuests} removeGuest = {this.removeGuest} />
           <LongAssText handleText = {this.handleText} />
         </div>
       </div>

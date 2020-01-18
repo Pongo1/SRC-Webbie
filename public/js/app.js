@@ -54506,12 +54506,14 @@ var Home = function (_Component) {
     _this.addToGuests = _this.addToGuests.bind(_this);
     _this.removeGuest = _this.removeGuest.bind(_this);
     _this.addEvent = _this.addEvent.bind(_this);
+    _this.addFile = _this.addFile.bind(_this);
     _this.state = {
       token: null,
       section_items: [],
       formData: {},
       guests: [],
-      events: []
+      events: [],
+      current_file: null
     };
     return _this;
   }
@@ -54543,9 +54545,7 @@ var Home = function (_Component) {
       b = comp.refs.event_start.value.trim();
       c = comp.refs.event_title.value.trim();
       d = comp.refs.event_desc.value.trim();
-      e = __WEBPACK_IMPORTED_MODULE_5_jquery___default()('#file').files;
-      console.log(e);
-      if (a === "" || b === "" || c === "" || d === "") {
+      if (a === "" || b === "" || c === "" || d === "" || this.state.current_file === null) {
         alert("Please Fill Out All Parameters For The Event!");
         return;
       }
@@ -54554,9 +54554,24 @@ var Home = function (_Component) {
         event_end: a,
         event_start: b,
         event_title: c,
-        event_desc: d
+        event_desc: d,
+        image: this.state.current_file
       };
-      this.setState({ events: [].concat(_toConsumableArray(events), [arr]) });
+      this.setState({ events: [].concat(_toConsumableArray(events), [arr]), current_file: null });
+      this.cleanUpEvents(comp);
+    }
+  }, {
+    key: "cleanUpEvents",
+    value: function cleanUpEvents(comp) {
+      comp.refs.event_end.value = "";
+      comp.refs.event_start.value = "";
+      comp.refs.event_title.value = "";
+      comp.refs.event_desc.value = "";
+    }
+  }, {
+    key: "addFile",
+    value: function addFile(file) {
+      this.setState({ current_file: file });
     }
   }, {
     key: "componentWillMount",
@@ -54647,6 +54662,7 @@ var Home = function (_Component) {
     value: function render() {
       var _this3 = this;
 
+      console.log(this.state);
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         "div",
         null,
@@ -54709,7 +54725,7 @@ var Home = function (_Component) {
             )
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Elements_Tagline__["a" /* default */], { handleText: this.handleText }),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Elements_EventCreator__["a" /* default */], { addEvent: this.addEvent, guests: this.state.guests, handleText: this.handleText, addToGuests: this.addToGuests, removeGuest: this.removeGuest }),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Elements_EventCreator__["a" /* default */], { addFile: this.addFile, addEvent: this.addEvent, guests: this.state.guests, handleText: this.handleText, addToGuests: this.addToGuests, removeGuest: this.removeGuest }),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Elements_LongAssText__["a" /* default */], { handleText: this.handleText })
         )
       );
@@ -55686,8 +55702,10 @@ var EventCreator = function (_Component) {
   }, {
     key: "handleFile",
     value: function handleFile(event) {
+      var file = event.target.files[0];
       var name = event.target.files[0].name;
-      __WEBPACK_IMPORTED_MODULE_1_jquery___default()('#file-name').val(name);
+      this.props.addFile(file);
+      document.getElementById('file-name').innerHTML = name;
     }
   }, {
     key: "render",
@@ -55753,9 +55771,6 @@ var EventCreator = function (_Component) {
         }),
         this.ejectGuestNames(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("textarea", {
-          onChange: function onChange(event) {
-            _this3.props.handleText(event);
-          },
           ref: "event_desc",
           placeholder: "Briefly describe the event...",
           className: "form-control margin-6",
