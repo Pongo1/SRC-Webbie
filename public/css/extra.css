@@ -1,4 +1,16 @@
 
+
+.added-event{
+  background:lightgray; 
+  padding:15px; 
+  margin:10px;
+  cursor:pointer;
+}
+.added-event:hover{
+  background:white; 
+  color:black; 
+  transition: .4s ease-in-out;
+}
 .overlay{
   position:fixed; 
   background:black; 

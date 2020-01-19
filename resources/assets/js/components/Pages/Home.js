@@ -14,6 +14,8 @@ class Home extends Component {
     this.addEvent = this.addEvent.bind(this);
     this.addFile = this.addFile.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
+    this.editEvent = this.editEvent.bind(this);
+    this.removeEvent = this.removeEvent.bind(this);
     this.state = {
       token: null,
       section_items: [],
@@ -21,8 +23,23 @@ class Home extends Component {
       guests: [],
       events: [],
       current_file: null,
-      modal:false
+      modal: false,
+      edit_mode: null
     };
+  }
+
+  
+  editEvent(index, comp) {
+    this.cleanUpEvents(comp);
+    this.setState({ edit_mode: index });
+    var ev = this.state.events[index];
+    comp.refs.event_title.value = ev.event_title;
+    comp.refs.event_start.value = ev.event_start;
+    comp.refs.event_end.value = ev.event_end;
+    comp.refs.event_desc.value = ev.event_desc;
+    this.setState({ current_file: ev.image, guests: ev.guests });
+    $("#file-name").val(ev.image.name);
+    console.log(ev.image);
   }
   addToGuests() {
     const name = document.getElementById("guest_name").value;
@@ -53,7 +70,6 @@ class Home extends Component {
       alert("Please Fill Out All Parameters For The Event!");
       return;
     }
-    console.log(a, b, c, d);
     var arr = {
       event_end: a,
       event_start: b,
@@ -62,14 +78,26 @@ class Home extends Component {
       image: this.state.current_file,
       guests: this.state.guests
     };
-    this.setState({ events: [...events, arr], current_file: null });
-    this.cleanUpEvents(comp);
+    if (this.state.edit_mode === null) { //add new
+      this.setState({ events: [...events, arr], current_file: null, });
+      this.cleanUpEvents(comp);
+    } else { //save edits
+      events[this.state.edit_mode] = arr;
+      this.cleanUpEvents(comp);
+      this.setState({edit_mode:null});
+    }
+  }
+
+  removeEvent(index){
+    var ev = this.state.events.filter((item,i)=>  index !== i); 
+    this.setState({events:ev});
   }
   cleanUpEvents(comp) {
     comp.refs.event_end.value = "";
     comp.refs.event_start.value = "";
     comp.refs.event_title.value = "";
     comp.refs.event_desc.value = "";
+    comp.refs.pic_file.value = "";
     this.setState({ guests: [] });
     $("#file-name").val("Upload A Picture");
   }
@@ -120,9 +148,35 @@ class Home extends Component {
     }
   }
 
+  ejectSections() {
+    return this.state.section_items.map((sec, index) => {
+      if (sec === "Event") {
+        return (
+          <EventCreator
+             removeEvent = {this.removeEvent}
+            edit_mode={this.state.edit_mode}
+            key={index}
+            editEvent={this.editEvent}
+            events={this.state.events}
+            addFile={this.addFile}
+            addEvent={this.addEvent}
+            guests={this.state.guests}
+            handleText={this.handleText}
+            addToGuests={this.addToGuests}
+            removeGuest={this.removeGuest}
+          />
+        );
+      } else if (sec === "About Us") {
+        return <LongAssText key={index} handleText={this.handleText} />;
+      } else if (sec === "Tagline") {
+        return <Tagline key={index} handleText={this.handleText} />;
+      }
+    });
+  }
   removeSection(val) {
     var sections = this.state.section_items;
     sections = sections.filter(sec => sec !== val);
+    this.refs.section_box.value = "Choose Section";
     this.setState({ section_items: sections });
   }
   handleText(event) {
@@ -130,7 +184,24 @@ class Home extends Component {
     form = { ...form, [event.target.name]: event.target.value };
     this.setState({ formData: form });
   }
+
+  sendFormData() {
+    var data = {
+      ...formData,
+      events: this.state.events,
+      guests: this.state.guests,
+      _token: this.state.token
+    };
+    $.ajax({ method: "POST", data: data, method: "data.save" })
+      .done(function() {
+        window.location.reload();
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
   render() {
+    console.log(this.state)
     return (
       <div>
         {this.state.modal ? <UserGuide toggleModal={this.toggleModal} /> : null}
@@ -149,9 +220,11 @@ class Home extends Component {
             {this.ejectSelectedSections()}
             <div className="combobox-design">
               <select
+                ref="section_box"
                 className="undefault-combobox"
                 onChange={event => this.selectSection(event)}
               >
+                <option>Choose Section</option>
                 <option>Event</option>
                 <option>About Us</option>
                 <option>Tagline</option>
@@ -169,23 +242,19 @@ class Home extends Component {
               See User Guide
             </button>
           </div>
-          <Tagline handleText={this.handleText} />
-          <EventCreator
-            addFile={this.addFile}
-            addEvent={this.addEvent}
-            guests={this.state.guests}
-            handleText={this.handleText}
-            addToGuests={this.addToGuests}
-            removeGuest={this.removeGuest}
-          />
-          <LongAssText handleText={this.handleText} />
 
-          <button
-            style={{ marginBottom: 100 }}
-            className="btn-lg pull-right btn btn-success z-depth-1"
-          >
-            Publish
-          </button>
+          {this.ejectSections()}
+          {this.state.section_items.length > 0 ? (
+            <button
+              onClick={() => {
+                this.sendFormData();
+              }}
+              style={{ marginBottom: 100 }}
+              className="btn-lg pull-right btn btn-success z-depth-1"
+            >
+              Publish
+            </button>
+          ) : null}
         </div>
       </div>
     );

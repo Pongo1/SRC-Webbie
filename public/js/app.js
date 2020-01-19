@@ -54510,6 +54510,8 @@ var Home = function (_Component) {
     _this.addEvent = _this.addEvent.bind(_this);
     _this.addFile = _this.addFile.bind(_this);
     _this.toggleModal = _this.toggleModal.bind(_this);
+    _this.editEvent = _this.editEvent.bind(_this);
+    _this.removeEvent = _this.removeEvent.bind(_this);
     _this.state = {
       token: null,
       section_items: [],
@@ -54517,12 +54519,27 @@ var Home = function (_Component) {
       guests: [],
       events: [],
       current_file: null,
-      modal: false
+      modal: false,
+      edit_mode: null
     };
     return _this;
   }
 
   _createClass(Home, [{
+    key: "editEvent",
+    value: function editEvent(index, comp) {
+      this.cleanUpEvents(comp);
+      this.setState({ edit_mode: index });
+      var ev = this.state.events[index];
+      comp.refs.event_title.value = ev.event_title;
+      comp.refs.event_start.value = ev.event_start;
+      comp.refs.event_end.value = ev.event_end;
+      comp.refs.event_desc.value = ev.event_desc;
+      this.setState({ current_file: ev.image, guests: ev.guests });
+      __WEBPACK_IMPORTED_MODULE_5_jquery___default()("#file-name").val(ev.image.name);
+      console.log(ev.image);
+    }
+  }, {
     key: "addToGuests",
     value: function addToGuests() {
       var name = document.getElementById("guest_name").value;
@@ -54553,7 +54570,6 @@ var Home = function (_Component) {
         alert("Please Fill Out All Parameters For The Event!");
         return;
       }
-      console.log(a, b, c, d);
       var arr = {
         event_end: a,
         event_start: b,
@@ -54562,8 +54578,24 @@ var Home = function (_Component) {
         image: this.state.current_file,
         guests: this.state.guests
       };
-      this.setState({ events: [].concat(_toConsumableArray(events), [arr]), current_file: null });
-      this.cleanUpEvents(comp);
+      if (this.state.edit_mode === null) {
+        //add new
+        this.setState({ events: [].concat(_toConsumableArray(events), [arr]), current_file: null });
+        this.cleanUpEvents(comp);
+      } else {
+        //save edits
+        events[this.state.edit_mode] = arr;
+        this.cleanUpEvents(comp);
+        this.setState({ edit_mode: null });
+      }
+    }
+  }, {
+    key: "removeEvent",
+    value: function removeEvent(index) {
+      var ev = this.state.events.filter(function (item, i) {
+        return index !== i;
+      });
+      this.setState({ events: ev });
     }
   }, {
     key: "cleanUpEvents",
@@ -54572,6 +54604,7 @@ var Home = function (_Component) {
       comp.refs.event_start.value = "";
       comp.refs.event_title.value = "";
       comp.refs.event_desc.value = "";
+      comp.refs.pic_file.value = "";
       this.setState({ guests: [] });
       __WEBPACK_IMPORTED_MODULE_5_jquery___default()("#file-name").val("Upload A Picture");
     }
@@ -54658,12 +54691,40 @@ var Home = function (_Component) {
       }
     }
   }, {
+    key: "ejectSections",
+    value: function ejectSections() {
+      var _this3 = this;
+
+      return this.state.section_items.map(function (sec, index) {
+        if (sec === "Event") {
+          return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Elements_EventCreator__["a" /* default */], {
+            removeEvent: _this3.removeEvent,
+            edit_mode: _this3.state.edit_mode,
+            key: index,
+            editEvent: _this3.editEvent,
+            events: _this3.state.events,
+            addFile: _this3.addFile,
+            addEvent: _this3.addEvent,
+            guests: _this3.state.guests,
+            handleText: _this3.handleText,
+            addToGuests: _this3.addToGuests,
+            removeGuest: _this3.removeGuest
+          });
+        } else if (sec === "About Us") {
+          return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Elements_LongAssText__["a" /* default */], { key: index, handleText: _this3.handleText });
+        } else if (sec === "Tagline") {
+          return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Elements_Tagline__["a" /* default */], { key: index, handleText: _this3.handleText });
+        }
+      });
+    }
+  }, {
     key: "removeSection",
     value: function removeSection(val) {
       var sections = this.state.section_items;
       sections = sections.filter(function (sec) {
         return sec !== val;
       });
+      this.refs.section_box.value = "Choose Section";
       this.setState({ section_items: sections });
     }
   }, {
@@ -54674,10 +54735,25 @@ var Home = function (_Component) {
       this.setState({ formData: form });
     }
   }, {
+    key: "sendFormData",
+    value: function sendFormData() {
+      var data = _extends({}, formData, {
+        events: this.state.events,
+        guests: this.state.guests,
+        _token: this.state.token
+      });
+      __WEBPACK_IMPORTED_MODULE_5_jquery___default.a.ajax(_defineProperty({ method: "POST", data: data }, "method", "data.save")).done(function () {
+        window.location.reload();
+      }).catch(function (e) {
+        console.log(e);
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
+      console.log(this.state);
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         "div",
         null,
@@ -54707,11 +54783,17 @@ var Home = function (_Component) {
               __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                 "select",
                 {
+                  ref: "section_box",
                   className: "undefault-combobox",
                   onChange: function onChange(event) {
-                    return _this3.selectSection(event);
+                    return _this4.selectSection(event);
                   }
                 },
+                __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+                  "option",
+                  null,
+                  "Choose Section"
+                ),
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   "option",
                   null,
@@ -54738,31 +54820,25 @@ var Home = function (_Component) {
               "button",
               {
                 onClick: function onClick() {
-                  _this3.toggleModal(true);
+                  _this4.toggleModal(true);
                 },
                 className: "btn btn-default round-me margin-6 pull-right remove-outline preview-btn-finish"
               },
               "See User Guide"
             )
           ),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Elements_Tagline__["a" /* default */], { handleText: this.handleText }),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Elements_EventCreator__["a" /* default */], {
-            addFile: this.addFile,
-            addEvent: this.addEvent,
-            guests: this.state.guests,
-            handleText: this.handleText,
-            addToGuests: this.addToGuests,
-            removeGuest: this.removeGuest
-          }),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Elements_LongAssText__["a" /* default */], { handleText: this.handleText }),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          this.ejectSections(),
+          this.state.section_items.length > 0 ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             "button",
             {
+              onClick: function onClick() {
+                _this4.sendFormData();
+              },
               style: { marginBottom: 100 },
               className: "btn-lg pull-right btn btn-success z-depth-1"
             },
             "Publish"
-          )
+          ) : null
         )
       );
     }
@@ -55741,13 +55817,66 @@ var EventCreator = function (_Component) {
       var file = event.target.files[0];
       var name = event.target.files[0].name;
       this.props.addFile(file);
-      document.getElementById('file-name').innerHTML = name;
+      document.getElementById("file-name").innerHTML = name;
+    }
+  }, {
+    key: "ejectAddedEvents",
+    value: function ejectAddedEvents() {
+      var _this3 = this;
+
+      if (this.props.events.length > 0) {
+        return this.props.events.map(function (e, index) {
+          return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "div",
+            { key: index, onClick: function onClick() {
+                _this3.props.editEvent(index, _this3);console.log(" ai am editing", index);
+              }, className: "added-event" },
+            e.event_title,
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              "span",
+              { className: "pull-right label label-danger rounded", style: { padding: 9 } },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("i", { className: "fa fa-close" }),
+              " Remove "
+            )
+          );
+        });
+      }
+    }
+  }, {
+    key: "whichButton",
+    value: function whichButton() {
+      var _this4 = this;
+
+      if (this.props.edit_mode === null) {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "button",
+          {
+            onClick: function onClick() {
+              _this4.props.addEvent(_this4);
+            },
+            className: "btn btn-success z-depth-1 round-me pull-right outline-0"
+          },
+          "Save Event And Add Another"
+        );
+      } else {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "button",
+          {
+            onClick: function onClick() {
+              _this4.props.addEvent(_this4);
+            },
+            className: "btn btn-default z-depth-1 round-me pull-right outline-0"
+          },
+          "Save Edit"
+        );
+      }
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this5 = this;
 
+      console.log(this.props.events);
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
         { className: "thumbnail thumbnail-finish" },
@@ -55772,7 +55901,11 @@ var EventCreator = function (_Component) {
           null,
           "Start Date"
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { ref: "event_start", type: "date", className: "form-control margin-6" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
+          ref: "event_start",
+          type: "date",
+          className: "form-control margin-6"
+        }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h5",
           null,
@@ -55790,14 +55923,14 @@ var EventCreator = function (_Component) {
           {
             className: "btn btn-default pull-right",
             onClick: function onClick() {
-              _this3.addToGuests();
+              _this5.addToGuests();
             }
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("i", { className: "glyphicon glyphicon-plus" })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
           onKeyDown: function onKeyDown(event) {
-            _this3.handleEnter(event);
+            _this5.handleEnter(event);
           },
           id: "guest_name",
           type: "text",
@@ -55818,23 +55951,37 @@ var EventCreator = function (_Component) {
           "Upload A Picture"
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "file", id: "file", onChange: function onChange(event) {
-            _this3.handleFile(event);
-          }, something: true, style: { display: 'none' } }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
+          ref: "pic_file",
+          type: "file",
+          id: "file",
+          onChange: function onChange(event) {
+            _this5.handleFile(event);
+          },
+          something: true,
+          style: { display: "none" }
+        }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "button",
-          { onClick: function onClick() {
-              __WEBPACK_IMPORTED_MODULE_1_jquery___default()('#file').click();
-            }, className: "btn  btn-default round-me remove-outline" },
+          {
+            onClick: function onClick() {
+              __WEBPACK_IMPORTED_MODULE_1_jquery___default()("#file").click();
+            },
+            className: "btn  btn-default round-me remove-outline"
+          },
           "Upload ",
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("i", { className: "glyphicon glyphicon-upload" })
         ),
+        this.whichButton(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "button",
-          { onClick: function onClick() {
-              _this3.props.addEvent(_this3);
-            }, className: "btn btn-success z-depth-1 round-me pull-right outline-0" },
-          "Save Event And Add Another"
+          "p",
+          { style: { marginTop: 6 } },
+          "All Added Events"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "div",
+          { style: { background: 'aliceblue', width: '100%', minHeight: 100, maxHeight: 100, overflowY: 'scroll' } },
+          this.ejectAddedEvents()
         )
       );
     }
