@@ -201,7 +201,6 @@ class Home extends Component {
     var data = {
       ...FORM_DEFAULTS, 
       ...this.state.formData,
-      guests:this.state.guests, 
       events:this.state.events,
       _token: this.state.token
     };

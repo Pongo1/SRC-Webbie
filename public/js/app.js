@@ -54750,7 +54750,6 @@ var Home = function (_Component) {
     key: "sendFormData",
     value: function sendFormData() {
       var data = _extends({}, FORM_DEFAULTS, this.state.formData, {
-        guests: this.state.guests,
         events: this.state.events,
         _token: this.state.token
       });
