@@ -32,7 +32,7 @@ class EventCreator extends Component {
     if (this.props.events.length > 0) {
       return this.props.events.map((e, index) => {
         return <div key={index} onClick ={()=>{this.props.editEvent(index,this); console.log(" ai am editing", index)}} className="added-event">{e.event_title}
-        <span className="pull-right label label-danger rounded" style={{padding:9}}><i className="fa fa-close"></i> Remove </span>
+        <span onClick = {()=>{this.props.removeEvent(index)}}className="pull-right label label-danger rounded" style={{padding:9}}><i className="fa fa-close"></i> Remove </span>
         </div>
       });
     }
@@ -120,7 +120,7 @@ class EventCreator extends Component {
           onChange={event => {
             this.handleFile(event);
           }}
-          something
+       
           style={{ display: "none" }}
         />
         <button

@@ -5,6 +5,11 @@ import EventCreator from "./Elements/EventCreator";
 import $ from "jquery";
 import UserGuide from "./Elements/UserGuide";
 
+
+const FORM_DEFAULTS = {
+  tagline:null, 
+  long_text:null
+}
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -38,7 +43,7 @@ class Home extends Component {
     comp.refs.event_end.value = ev.event_end;
     comp.refs.event_desc.value = ev.event_desc;
     this.setState({ current_file: ev.image, guests: ev.guests });
-    $("#file-name").val(ev.image.name);
+    document.getElementById("file-name").innerHTML =ev.image.name;
     console.log(ev.image);
   }
   addToGuests() {
@@ -99,7 +104,7 @@ class Home extends Component {
     comp.refs.event_desc.value = "";
     comp.refs.pic_file.value = "";
     this.setState({ guests: [] });
-    $("#file-name").val("Upload A Picture");
+    document.getElementById("file-name").innerHTML = "Upload A Picture";
   }
   addFile(file) {
     this.setState({ current_file: file });
@@ -148,6 +153,13 @@ class Home extends Component {
     }
   }
 
+  publishData(){
+    const all = {
+     
+    }
+
+    console.log(all)
+  }
   ejectSections() {
     return this.state.section_items.map((sec, index) => {
       if (sec === "Event") {
@@ -187,12 +199,15 @@ class Home extends Component {
 
   sendFormData() {
     var data = {
-      ...formData,
-      events: this.state.events,
-      guests: this.state.guests,
+      ...FORM_DEFAULTS, 
+      ...this.state.formData,
+      guests:this.state.guests, 
+      events:this.state.events,
       _token: this.state.token
     };
-    $.ajax({ method: "POST", data: data, method: "data.save" })
+
+    console.log(data);
+    $.ajax({ method: "POST", data: data, url: "data.save" })
       .done(function() {
         window.location.reload();
       })
@@ -201,7 +216,6 @@ class Home extends Component {
       });
   }
   render() {
-    console.log(this.state)
     return (
       <div>
         {this.state.modal ? <UserGuide toggleModal={this.toggleModal} /> : null}

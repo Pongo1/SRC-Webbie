@@ -4,8 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Subdomain;
+use App\Event; 
+use App\About; 
+use App\Images; 
 class MainController extends Controller
 {
+
+  function saveEvents($events){
+
+  }
     function checkUniqueness($name){
       $response = [
         'success'=>true, 

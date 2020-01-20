@@ -54496,6 +54496,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+var FORM_DEFAULTS = {
+  tagline: null,
+  long_text: null
+};
+
 var Home = function (_Component) {
   _inherits(Home, _Component);
 
@@ -54536,7 +54541,7 @@ var Home = function (_Component) {
       comp.refs.event_end.value = ev.event_end;
       comp.refs.event_desc.value = ev.event_desc;
       this.setState({ current_file: ev.image, guests: ev.guests });
-      __WEBPACK_IMPORTED_MODULE_5_jquery___default()("#file-name").val(ev.image.name);
+      document.getElementById("file-name").innerHTML = ev.image.name;
       console.log(ev.image);
     }
   }, {
@@ -54606,7 +54611,7 @@ var Home = function (_Component) {
       comp.refs.event_desc.value = "";
       comp.refs.pic_file.value = "";
       this.setState({ guests: [] });
-      __WEBPACK_IMPORTED_MODULE_5_jquery___default()("#file-name").val("Upload A Picture");
+      document.getElementById("file-name").innerHTML = "Upload A Picture";
     }
   }, {
     key: "addFile",
@@ -54691,6 +54696,13 @@ var Home = function (_Component) {
       }
     }
   }, {
+    key: "publishData",
+    value: function publishData() {
+      var all = {};
+
+      console.log(all);
+    }
+  }, {
     key: "ejectSections",
     value: function ejectSections() {
       var _this3 = this;
@@ -54737,12 +54749,14 @@ var Home = function (_Component) {
   }, {
     key: "sendFormData",
     value: function sendFormData() {
-      var data = _extends({}, formData, {
-        events: this.state.events,
+      var data = _extends({}, FORM_DEFAULTS, this.state.formData, {
         guests: this.state.guests,
+        events: this.state.events,
         _token: this.state.token
       });
-      __WEBPACK_IMPORTED_MODULE_5_jquery___default.a.ajax(_defineProperty({ method: "POST", data: data }, "method", "data.save")).done(function () {
+
+      console.log(data);
+      __WEBPACK_IMPORTED_MODULE_5_jquery___default.a.ajax({ method: "POST", data: data, url: "data.save" }).done(function () {
         window.location.reload();
       }).catch(function (e) {
         console.log(e);
@@ -54753,7 +54767,6 @@ var Home = function (_Component) {
     value: function render() {
       var _this4 = this;
 
-      console.log(this.state);
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         "div",
         null,
@@ -55834,7 +55847,9 @@ var EventCreator = function (_Component) {
             e.event_title,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               "span",
-              { className: "pull-right label label-danger rounded", style: { padding: 9 } },
+              { onClick: function onClick() {
+                  _this3.props.removeEvent(index);
+                }, className: "pull-right label label-danger rounded", style: { padding: 9 } },
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("i", { className: "fa fa-close" }),
               " Remove "
             )
@@ -55958,7 +55973,7 @@ var EventCreator = function (_Component) {
           onChange: function onChange(event) {
             _this5.handleFile(event);
           },
-          something: true,
+
           style: { display: "none" }
         }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
