@@ -54500,6 +54500,7 @@ var FORM_DEFAULTS = {
   tagline: null,
   long_text: null
 };
+var DEFAULT_DATE = "2020-02-22";
 
 var Home = function (_Component) {
   _inherits(Home, _Component);
@@ -54605,8 +54606,8 @@ var Home = function (_Component) {
   }, {
     key: "cleanUpEvents",
     value: function cleanUpEvents(comp) {
-      comp.refs.event_end.value = "";
-      comp.refs.event_start.value = "";
+      comp.refs.event_end.value = DEFAULT_DATE;
+      comp.refs.event_start.value = DEFAULT_DATE;
       comp.refs.event_title.value = "";
       comp.refs.event_desc.value = "";
       comp.refs.pic_file.value = "";
@@ -54749,14 +54750,16 @@ var Home = function (_Component) {
   }, {
     key: "sendFormData",
     value: function sendFormData() {
-      var data = _extends({}, FORM_DEFAULTS, this.state.formData, {
-        events: this.state.events,
-        _token: this.state.token
-      });
-
-      console.log(data);
-      __WEBPACK_IMPORTED_MODULE_5_jquery___default.a.ajax({ method: "POST", data: data, url: "data.save" }).done(function () {
-        window.location.reload();
+      var form = new FormData();
+      var more = _extends({}, FORM_DEFAULTS, this.state.formData);
+      form.append('events', this.state.events);
+      form.append('_token', this.state.token);
+      form.append('long_text', more.long_text);
+      form.append('tagline', more.tagline);
+      console.log(this.state.events);
+      __WEBPACK_IMPORTED_MODULE_5_jquery___default.a.ajax({ method: "post", data: form, url: "/data.save" }).done(function (response) {
+        console.log(response);
+        //window.location.reload();
       }).catch(function (e) {
         console.log(e);
       });
@@ -55840,17 +55843,27 @@ var EventCreator = function (_Component) {
         return this.props.events.map(function (e, index) {
           return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "div",
-            { key: index, onClick: function onClick() {
-                _this3.props.editEvent(index, _this3);console.log(" ai am editing", index);
-              }, className: "added-event" },
+            {
+              key: index,
+              onClick: function onClick() {
+                _this3.props.editEvent(index, _this3);
+                console.log(" ai am editing", index);
+              },
+              className: "added-event"
+            },
             e.event_title,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               "span",
-              { onClick: function onClick() {
+              {
+                onClick: function onClick() {
                   _this3.props.removeEvent(index);
-                }, className: "pull-right label label-danger rounded", style: { padding: 9 } },
+                },
+                className: "pull-right label label-danger rounded",
+                style: { padding: 9 }
+              },
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("i", { className: "fa fa-close" }),
-              " Remove "
+              " Remove",
+              " "
             )
           );
         });
@@ -55918,6 +55931,7 @@ var EventCreator = function (_Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
           ref: "event_start",
           type: "date",
+          defaultValue: "2020-03-22",
           className: "form-control margin-6"
         }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -55925,7 +55939,12 @@ var EventCreator = function (_Component) {
           null,
           "End date "
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { ref: "event_end", type: "date", className: "form-control margin-6" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
+          ref: "event_end",
+          defaultValue: "2020-03-22",
+          type: "date",
+          className: "form-control margin-6"
+        }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "small",
           null,
@@ -55937,7 +55956,7 @@ var EventCreator = function (_Component) {
           {
             className: "btn btn-default pull-right",
             onClick: function onClick() {
-              _this5.addToGuests();
+              _this5.props.addToGuests();
             }
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("i", { className: "glyphicon glyphicon-plus" })
@@ -55972,7 +55991,6 @@ var EventCreator = function (_Component) {
           onChange: function onChange(event) {
             _this5.handleFile(event);
           },
-
           style: { display: "none" }
         }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -55994,7 +56012,15 @@ var EventCreator = function (_Component) {
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "div",
-          { style: { background: 'aliceblue', width: '100%', minHeight: 100, maxHeight: 100, overflowY: 'scroll' } },
+          {
+            style: {
+              background: "aliceblue",
+              width: "100%",
+              minHeight: 100,
+              maxHeight: 100,
+              overflowY: "scroll"
+            }
+          },
           this.ejectAddedEvents()
         )
       );

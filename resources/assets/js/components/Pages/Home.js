@@ -5,11 +5,11 @@ import EventCreator from "./Elements/EventCreator";
 import $ from "jquery";
 import UserGuide from "./Elements/UserGuide";
 
-
 const FORM_DEFAULTS = {
-  tagline:null, 
-  long_text:null
-}
+  tagline: null,
+  long_text: null
+};
+const DEFAULT_DATE = "2020-02-22";
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +33,6 @@ class Home extends Component {
     };
   }
 
-  
   editEvent(index, comp) {
     this.cleanUpEvents(comp);
     this.setState({ edit_mode: index });
@@ -43,7 +42,7 @@ class Home extends Component {
     comp.refs.event_end.value = ev.event_end;
     comp.refs.event_desc.value = ev.event_desc;
     this.setState({ current_file: ev.image, guests: ev.guests });
-    document.getElementById("file-name").innerHTML =ev.image.name;
+    document.getElementById("file-name").innerHTML = ev.image.name;
     console.log(ev.image);
   }
   addToGuests() {
@@ -83,23 +82,25 @@ class Home extends Component {
       image: this.state.current_file,
       guests: this.state.guests
     };
-    if (this.state.edit_mode === null) { //add new
-      this.setState({ events: [...events, arr], current_file: null, });
+    if (this.state.edit_mode === null) {
+      //add new
+      this.setState({ events: [...events, arr], current_file: null });
       this.cleanUpEvents(comp);
-    } else { //save edits
+    } else {
+      //save edits
       events[this.state.edit_mode] = arr;
       this.cleanUpEvents(comp);
-      this.setState({edit_mode:null});
+      this.setState({ edit_mode: null });
     }
   }
 
-  removeEvent(index){
-    var ev = this.state.events.filter((item,i)=>  index !== i); 
-    this.setState({events:ev});
+  removeEvent(index) {
+    var ev = this.state.events.filter((item, i) => index !== i);
+    this.setState({ events: ev });
   }
   cleanUpEvents(comp) {
-    comp.refs.event_end.value = "";
-    comp.refs.event_start.value = "";
+    comp.refs.event_end.value = DEFAULT_DATE;
+    comp.refs.event_start.value = DEFAULT_DATE;
     comp.refs.event_title.value = "";
     comp.refs.event_desc.value = "";
     comp.refs.pic_file.value = "";
@@ -153,19 +154,17 @@ class Home extends Component {
     }
   }
 
-  publishData(){
-    const all = {
-     
-    }
+  publishData() {
+    const all = {};
 
-    console.log(all)
+    console.log(all);
   }
   ejectSections() {
     return this.state.section_items.map((sec, index) => {
       if (sec === "Event") {
         return (
           <EventCreator
-             removeEvent = {this.removeEvent}
+            removeEvent={this.removeEvent}
             edit_mode={this.state.edit_mode}
             key={index}
             editEvent={this.editEvent}
@@ -198,17 +197,20 @@ class Home extends Component {
   }
 
   sendFormData() {
-    var data = {
-      ...FORM_DEFAULTS, 
+    var form = new FormData();
+    var more = {
+      ...FORM_DEFAULTS,
       ...this.state.formData,
-      events:this.state.events,
-      _token: this.state.token
     };
-
-    console.log(data);
-    $.ajax({ method: "POST", data: data, url: "data.save" })
-      .done(function() {
-        window.location.reload();
+    form.append('events',this.state.events); 
+    form.append('_token',this.state.token); 
+    form.append('long_text',more.long_text); 
+    form.append('tagline',more.tagline);
+    console.log(this.state.events)
+    $.ajax({ method: "post", data: form, url: "/data.save" })
+      .done(function(response) {
+        console.log(response);
+        //window.location.reload();
       })
       .catch(e => {
         console.log(e);

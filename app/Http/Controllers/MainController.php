@@ -13,7 +13,27 @@ class MainController extends Controller
 {
 
 
-  
+  function saveContent(Request $request){
+    return $request;
+    $saveEvents = $this->saveEvents($request->events); 
+    $saveAbout = $this->saveAbout($request->long_text); 
+    $saveTagline = $this->saveTagline($request->tagline); 
+    if($saveEvents && $saveAbout && $saveTagline){
+      return [
+        'status'=>TRUE, 
+        'errors'=>[]
+      ];
+    }else{
+      $errors = []; 
+      if(!$saveAbout) {array_push($errors,"Saving about text failed!");}
+      if(!$saveEvents) {array_push($errors,"Saving events failed!");}
+      if(!$saveTagline) {array_push($errors,"Saving tagline text failed!");}
+      return [
+        'status'=>FALSE, 
+        'errors'=>$errors
+      ];
+    }
+  }
   function saveAbout($text){
     if(trim($text) ==""){ return ; }
     $new = new About(); 
@@ -28,6 +48,7 @@ class MainController extends Controller
     $new->text = $tageline; 
     $new->subdomain_id = Auth::User()->subdomain->id; 
     $new->save(); 
+    return TRUE;
 
   }
   function saveGuests($guests,$id){
@@ -38,6 +59,7 @@ class MainController extends Controller
       $new->event_id = $id;
       $new->save();
     }
+    return TRUE;
   }
   function saveEvents($events){
     if(count($events) == 0) {return ;}
@@ -60,6 +82,8 @@ class MainController extends Controller
       $img->$event_id = $new->id; 
       $img->save();
     }
+
+    return TRUE;
     
   }
     function checkUniqueness($name){

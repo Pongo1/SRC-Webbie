@@ -15,3 +15,4 @@ Route::get('/get-csrf-token',function(){
 });
 
 Route::get('name.check/{name}','MainController@checkUniqueness');
+Route::post('data.save','MainController@saveContent');
