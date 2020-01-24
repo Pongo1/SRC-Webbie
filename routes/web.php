@@ -1,6 +1,9 @@
 <?php
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome');
+});
+Route::get('/', function () {
+    return view('Landing');
 });
 Auth::routes();
 Route::get('/view',function(){
