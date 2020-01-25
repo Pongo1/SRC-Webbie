@@ -70,19 +70,20 @@
     outline: 0;
     background: transparent;
     border-width: 0px;
-    color: black;
+    color: white;
     padding: 30px 70px;
     font-size: 1.5rem;
-    width: 60%;
+    width: 100%;
     text-align: center
 
   }
   .select-box{
-    padding:30px 70px; 
-    babckground:white !important; 
-    border:solid 2px white;
-    width:50%; 
-    margin-top:60px;
+    padding: 30px 70px;
+    background: #388b05 !important;
+    border: solid 2px #0a090900;
+    width: 50%;
+    margin-top: 30px;
+    border-radius: 5px;
 
   }
 
@@ -100,10 +101,10 @@
   </div>
   <img src={{asset('imgs/alu-m-3.jpg')}} class="div" > 
   <div class="div div-2" > 
-    <div style="bottom:200px; position:absolute; left:7%;" class="z-depth-1">
+    <div style="bottom:200px; position:absolute; left:7%;" class="">
       <center>
         <h1 style="color:white">Which Branch Would You Like To Visit?</h1>
-        <div class="select-box">
+        <div class="select-box z-depth-1">
         <select class="m-undefault"> 
           <option>first 1</option>
           <option>first 1</option>
