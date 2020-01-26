@@ -12,6 +12,7 @@
     <!-- <link rel="stylesheet" href="{{asset('css/mdb.min.css')}}"> -->
     <link rel="stylesheet" href="{{asset('css/extra.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.min.css')}}">
+    <link rel="shortcut icon" type="image/png" href="{{asset('imgs/src-logo.png')}}"/>
    
 </head>
 <body>
