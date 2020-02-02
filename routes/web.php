@@ -20,3 +20,5 @@ Route::get('/subscribe','MainController@subscribe');
 
 Route::get('name.check/{name}','MainController@checkUniqueness');
 Route::post('data.save','MainController@saveContent');
+
+Route::post('/send','MainController@s');

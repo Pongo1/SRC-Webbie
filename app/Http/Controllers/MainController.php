@@ -15,6 +15,10 @@ class MainController extends Controller
 
 
 
+
+  function s(Request $request){
+   return $request;
+  }
   function subscribe(Request $request){
     $found = Subscribe::where('email',$request->email)->first(); 
     if(!$found){

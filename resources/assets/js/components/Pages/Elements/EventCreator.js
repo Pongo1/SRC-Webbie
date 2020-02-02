@@ -24,6 +24,7 @@ class EventCreator extends Component {
 
   handleFile(event) {
     var file = event.target.files[0];
+    var fakePath = event.target.value;
     var name = event.target.files[0].name;
     this.props.addFile(file);
     document.getElementById("file-name").innerHTML = name;

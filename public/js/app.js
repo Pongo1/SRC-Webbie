@@ -54727,6 +54727,7 @@ var Home = function (_Component) {
       return this.state.section_items.map(function (sec, index) {
         if (sec === "Event") {
           return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__Elements_EventCreator__["a" /* default */], {
+            token: _this3.state.token,
             removeEvent: _this3.removeEvent,
             edit_mode: _this3.state.edit_mode,
             key: index,
@@ -54768,17 +54769,38 @@ var Home = function (_Component) {
     value: function sendFormData() {
       var form = new FormData();
       var more = _extends({}, FORM_DEFAULTS, this.state.formData);
-      form.append('events', this.state.events);
-      form.append('_token', this.state.token);
-      form.append('long_text', more.long_text);
-      form.append('tagline', more.tagline);
-      console.log(this.state.events);
-      __WEBPACK_IMPORTED_MODULE_5_jquery___default.a.ajax({ method: "post", data: form, url: "/data.save" }).done(function (response) {
-        console.log(response);
-        //window.location.reload();
-      }).catch(function (e) {
-        console.log(e);
-      });
+      //form.append("events", this.state.events);
+      form.append("_token", this.state.token);
+      form.append('image', this.state.events[0].image);
+      __WEBPACK_IMPORTED_MODULE_5_jquery___default()('#test-form').submit();
+      // $.ajax({method:'post',url:'send',data:form,processData:false}).done(res=>{
+      //   console.log(res);
+      // })
+      //form.append("long_text", more.long_text);
+      //form.append("tagline", more.tagline);
+      // $.ajax({
+      //   method: "post",
+      //   data: form,
+      //   processData: false,
+      //   //contentType:false,
+      //   url: "/data.save"
+      // })
+      //   .done(function(response) {
+      //     console.log(response);
+      //     //window.location.reload();
+      //   })
+      //   .catch(e => {
+      //     console.log(e);
+      //   });
+
+      // fetch("/data.save",{
+      //   method:'post', 
+      //   body:form
+      // }).then(res=>{
+      //   res.json().then(som =>{
+      //     console.log(som)
+      //   })
+      // }).catch(console.error)
     }
   }, {
     key: "render",
@@ -55846,6 +55868,7 @@ var EventCreator = function (_Component) {
     key: "handleFile",
     value: function handleFile(event) {
       var file = event.target.files[0];
+      var fakePath = event.target.value;
       var name = event.target.files[0].name;
       this.props.addFile(file);
       document.getElementById("file-name").innerHTML = name;

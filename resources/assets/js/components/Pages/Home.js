@@ -164,6 +164,7 @@ class Home extends Component {
       if (sec === "Event") {
         return (
           <EventCreator
+            token = {this.state.token}
             removeEvent={this.removeEvent}
             edit_mode={this.state.edit_mode}
             key={index}
@@ -200,21 +201,40 @@ class Home extends Component {
     var form = new FormData();
     var more = {
       ...FORM_DEFAULTS,
-      ...this.state.formData,
+      ...this.state.formData
     };
-    form.append('events',this.state.events); 
-    form.append('_token',this.state.token); 
-    form.append('long_text',more.long_text); 
-    form.append('tagline',more.tagline);
-    console.log(this.state.events)
-    $.ajax({ method: "post", data: form, url: "/data.save" })
-      .done(function(response) {
-        console.log(response);
-        //window.location.reload();
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    //form.append("events", this.state.events);
+    form.append("_token", this.state.token);
+    form.append('image',this.state.events[0].image)
+    $('#test-form').submit();
+    // $.ajax({method:'post',url:'send',data:form,processData:false}).done(res=>{
+    //   console.log(res);
+    // })
+    //form.append("long_text", more.long_text);
+    //form.append("tagline", more.tagline);
+    // $.ajax({
+    //   method: "post",
+    //   data: form,
+    //   processData: false,
+    //   //contentType:false,
+    //   url: "/data.save"
+    // })
+    //   .done(function(response) {
+    //     console.log(response);
+    //     //window.location.reload();
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
+
+    // fetch("/data.save",{
+    //   method:'post', 
+    //   body:form
+    // }).then(res=>{
+    //   res.json().then(som =>{
+    //     console.log(som)
+    //   })
+    // }).catch(console.error)
   }
   render() {
     return (
