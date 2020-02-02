@@ -11,7 +11,7 @@ class EventCollection extends Component {
   render() {
     return (
       <div>
-        <EventCard />
+        <EventCard toggleModal = {this.props.toggleModal} />
         <center>
           <button
             style={{ marginRight: 7 }}

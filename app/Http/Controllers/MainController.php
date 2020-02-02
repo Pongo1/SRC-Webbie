@@ -9,10 +9,21 @@ use App\About;
 use App\Images; 
 use App\Guest;
 use App\Tagline;
+use App\Subscribe;
 class MainController extends Controller
 {
 
 
+
+  function subscribe(Request $request){
+    $found = Subscribe::where('email',$request->email)->first(); 
+    if(!$found){
+      $s = new Subscribe(); 
+      $s->email = $request->email; 
+      $s->save(); 
+    }
+    return redirect()->back();
+  }
   function saveContent(Request $request){
     return $request;
     $saveEvents = $this->saveEvents($request->events); 
